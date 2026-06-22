@@ -1,7 +1,11 @@
-function App() {
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
+
+function Hero() {
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
-      <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+      <Navbar />
+      <main className="flex h-[85vh] flex-col items-center justify-center px-6 text-center">
         
         <h1 className="text-6xl font-bold tracking-tight">Haven</h1>
 
@@ -15,7 +19,8 @@ function App() {
         </p>
 
         <div className="mt-10 flex gap-4">
-          <button className="rounded-xl bg-white px-6 py-3 text-black font-medium">Get Started</button>
+          <Link to="/dashboard"
+            className="rounded-xl bg-white px-6 py-3 text-black">Get Started</Link>
           <button className="rounded-xl border border-zinc-700 px-6 py-3">Learn More</button>
         </div>
 
@@ -24,4 +29,4 @@ function App() {
   );
 }
 
-export default App;
+export default Hero;

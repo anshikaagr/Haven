@@ -6,7 +6,7 @@ function Sidebar() {
       <h1 className="mb-10 text-2xl font-bold">Haven</h1>
 
       <nav className="flex flex-col gap-4">
-        <Link to="/">Dashboard</Link>
+        <Link to="/dashboard">Dashboard</Link>
         <Link to="/documents">Documents</Link>
         <Link to="/important">Important</Link>
         <Link to="/expiry">Expiry</Link>

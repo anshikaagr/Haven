@@ -5,7 +5,6 @@ import DocumentCard from "../components/DocumentCard";
 function Dashboard() {
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white">
-      
       <Sidebar />
 
       <main className="flex-1 p-8">

@@ -24,6 +24,7 @@ export default App;*/
 
 import { Routes, Route } from "react-router-dom";
 
+import Hero from "./pages/Hero";
 import Dashboard from "./pages/Dashboard";
 import Documents from "./pages/Documents";
 import Important from "./pages/Important";
@@ -33,7 +34,8 @@ import Settings from "./pages/Settings";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/" element={<Hero />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/important" element={<Important />} />
       <Route path="/expiry" element={<Expiry />} />
