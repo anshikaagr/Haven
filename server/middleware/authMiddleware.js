@@ -16,9 +16,9 @@ const protect = (req, res, next) => {
       token,
       process.env.JWT_SECRET
     );
-
+    console.log("Decoded JWT:", decoded);
     req.user = decoded;
-
+    console.log("req.user:", req.user);
     next();
 
   } catch (error) {

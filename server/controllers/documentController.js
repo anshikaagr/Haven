@@ -25,7 +25,6 @@ exports.getDocuments = async (req, res) => {
     const documents = await Document.find({
       user: req.user.id,
     });
-
     res.json(documents);
   } catch (error) {
     res.status(500).json({

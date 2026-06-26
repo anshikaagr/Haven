@@ -1,8 +1,33 @@
+import { useEffect, useState } from "react";
+import api from "../api/api";
 import Sidebar from "../components/Sidebar";
 import SearchBar from "../components/SearchBar";
 import DocumentCard from "../components/DocumentCard";
 
 function Dashboard() {
+
+    const [documents, setDocuments] = useState([]);
+
+    useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await api.get("/documents", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setDocuments(res.data);
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white">
       <Sidebar />
@@ -61,20 +86,15 @@ function Dashboard() {
             <h2 className="mb-4 text-xl font-semibold">Recent Documents</h2>
 
             <div className="grid gap-4 md:grid-cols-2">
-            <DocumentCard
-                title="Passport.pdf"
-                category="Identity"
-            />
-            <DocumentCard
-                title="Semester Marksheet.pdf"
-                category="Education"
-            />
-            <DocumentCard
-                title="Offer Letter.pdf"
-                category="Career"
-            />
+            {documents.map((doc) => (
+                <DocumentCard
+                key={doc._id}
+                title={doc.title}
+                category={doc.category}
+                />
+            ))}
             </div>
-                </main>
+            </main>
 
             </div>
   );
