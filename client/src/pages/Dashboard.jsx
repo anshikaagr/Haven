@@ -3,10 +3,12 @@ import api from "../api/api";
 import Sidebar from "../components/Sidebar";
 import SearchBar from "../components/SearchBar";
 import DocumentCard from "../components/DocumentCard";
+import UploadModal from "../components/UploadModal";
 
 function Dashboard() {
 
     const [documents, setDocuments] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
     const fetchDocuments = async () => {
@@ -45,7 +47,9 @@ function Dashboard() {
             </p>
         </div>
 
-        <button className="rounded-xl bg-white px-5 py-3 font-medium text-black">+ Upload</button>
+        <button 
+        onClick={() => setIsModalOpen(true)}
+        className="rounded-xl bg-white px-5 py-3 font-medium text-black">+ Upload</button>
 
         </div>
 
@@ -95,9 +99,16 @@ function Dashboard() {
             ))}
             </div>
             </main>
-
+            <UploadModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              
+            />
             </div>
   );
 }
+useEffect(() => {
+  fetchDocuments();
+}, []);
 
 export default Dashboard;
