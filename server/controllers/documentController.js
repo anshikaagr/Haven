@@ -1,13 +1,37 @@
 const Document = require("../models/Document");
+const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier");
 
 exports.createDocument = async (req, res) => {
   try {
-    const { title, category, fileUrl } = req.body;
+    const { title, category} = req.body;
 
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Please upload a file",
+      });
+    }
+
+    const uploadFromBuffer = () =>
+      new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: "auto",
+            folder: "haven-documents",
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+
+        streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+      });
+      const result = await uploadFromBuffer();
     const document = await Document.create({
       title,
       category,
-      fileUrl,
+      fileUrl: result.secure_url,
       user: req.user.id,
     });
 

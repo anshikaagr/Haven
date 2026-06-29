@@ -10,7 +10,6 @@ function Dashboard() {
     const [documents, setDocuments] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
     const fetchDocuments = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -28,7 +27,8 @@ function Dashboard() {
       }
     };
 
-    fetchDocuments();
+    useEffect(() => {
+      fetchDocuments();
   }, []);
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white">
@@ -107,8 +107,5 @@ function Dashboard() {
             </div>
   );
 }
-useEffect(() => {
-  fetchDocuments();
-}, []);
 
 export default Dashboard;

@@ -10,19 +10,18 @@ function UploadModal({ isOpen, onClose ,
   try {
     const token = localStorage.getItem("token");
 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("file", file);
+
     await api.post(
-      "/documents",
-      {
-        title,
-        category,
-        fileUrl: "https://example.com/document.pdf",
+      "/documents", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    });
 
     alert("Document uploaded!");
     await fetchDocuments();
@@ -34,6 +33,10 @@ function UploadModal({ isOpen, onClose ,
 
   } catch (error) {
     console.log(error);
+    console.log(error.response);
+    console.log(error.response?.data);
+
+    alert(error.response?.data?.message || "Upload failed!");
   }
 };
   if (!isOpen) return null;
