@@ -95,6 +95,7 @@ function Dashboard() {
                 key={doc._id}
                 title={doc.title}
                 category={doc.category}
+                fileUrl={doc.fileUrl}
                 />
             ))}
             </div>
