@@ -9,6 +9,8 @@ function Dashboard() {
 
     const [documents, setDocuments] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("All");
 
     const fetchDocuments = async () => {
       try {
@@ -30,6 +32,26 @@ function Dashboard() {
     useEffect(() => {
       fetchDocuments();
   }, []);
+const categoryCounts = {
+  Identity: documents.filter(doc => doc.category === "Identity").length,
+  Education: documents.filter(doc => doc.category === "Education").length,
+  Financial: documents.filter(doc => doc.category === "Financial").length,
+  Medical: documents.filter(doc => doc.category === "Medical").length,
+  Other: documents.filter(doc => doc.category === "Other").length,
+};
+  const filteredDocuments = documents.filter((doc) =>{
+      const matchesSearch = doc.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+      
+    const matchesCategory =
+      selectedCategory === "All" ||
+      doc.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  }
+  
+  );
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white">
       <Sidebar />
@@ -53,35 +75,54 @@ function Dashboard() {
 
         </div>
 
-        <SearchBar />
+        <input
+          type="text"
+          placeholder="Search documents..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-xl border border-zinc-800 bg-zinc-900 p-4 text-white outline-none"
+        />
 
         <h2 className="mt-8 mb-4 text-xl font-semibold">Categories</h2>
 
                 <div className="grid gap-4 md:grid-cols-5">
-
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                <div
+                  onClick={() => setSelectedCategory("All")}
+                  className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-900 p-4 hover:border-white transition"
+                >
+                  <h3 className="font-medium">All</h3>
+                  <p className="mt-2 text-2xl font-bold">
+                    {documents.length}
+                  </p>
+                </div>
+                <div onClick={() => setSelectedCategory("Identity")}
+                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
                     <h3 className="font-medium">Identity</h3>
-                    <p className="mt-2 text-2xl font-bold">4</p>
+                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Identity}</p>
                 </div>
 
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                <div onClick={() => setSelectedCategory("Education")}
+                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
                     <h3 className="font-medium">Education</h3>
-                    <p className="mt-2 text-2xl font-bold">7</p>
+                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Education}</p>
                 </div>
 
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                <div onClick={() => setSelectedCategory("Financial")}
+                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
                     <h3 className="font-medium">Financial</h3>
-                    <p className="mt-2 text-2xl font-bold">3</p>
+                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Financial}</p>
                 </div>
 
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                <div onClick={() => setSelectedCategory("Medical")}
+                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
                     <h3 className="font-medium">Medical</h3>
-                    <p className="mt-2 text-2xl font-bold">5</p>
+                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Medical}</p>
                 </div>
 
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+                <div onClick={() => setSelectedCategory("Other")}
+                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
                     <h3 className="font-medium">Other</h3>
-                    <p className="mt-2 text-2xl font-bold">2</p>
+                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Other}</p>
                 </div>
 
                 </div>
@@ -90,7 +131,7 @@ function Dashboard() {
             <h2 className="mb-4 text-xl font-semibold">Recent Documents</h2>
 
             <div className="grid gap-4 md:grid-cols-2">
-            {documents.map((doc) => (
+            {filteredDocuments.map((doc) => (
                 <DocumentCard
                 key={doc._id}
                 id={doc._id}
