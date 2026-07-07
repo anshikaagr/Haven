@@ -93,9 +93,11 @@ function Dashboard() {
             {documents.map((doc) => (
                 <DocumentCard
                 key={doc._id}
+                id={doc._id}
                 title={doc.title}
                 category={doc.category}
                 fileUrl={doc.fileUrl}
+                fetchDocuments={fetchDocuments}
                 />
             ))}
             </div>

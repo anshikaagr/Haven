@@ -32,6 +32,7 @@ exports.createDocument = async (req, res) => {
       title,
       category,
       fileUrl: result.secure_url,
+      publicId: result.public_id,
       user: req.user.id,
     });
 
@@ -50,6 +51,35 @@ exports.getDocuments = async (req, res) => {
       user: req.user.id,
     });
     res.json(documents);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteDocument = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    console.log(document);
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    await cloudinary.uploader.destroy(document.publicId, {
+      resource_type: "raw",
+    });
+
+    await document.deleteOne();
+
+    res.json({
+      message: "Document deleted successfully",
+    });
+
   } catch (error) {
     res.status(500).json({
       message: error.message,
