@@ -52,6 +52,16 @@ const categoryCounts = {
   }
   
   );
+
+  const categories = [
+  "All",
+  "Identity",
+  "Education",
+  "Financial",
+  "Medical",
+  "Other",
+];
+
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white">
       <Sidebar />
@@ -85,46 +95,32 @@ const categoryCounts = {
 
         <h2 className="mt-8 mb-4 text-xl font-semibold">Categories</h2>
 
-                <div className="grid gap-4 md:grid-cols-5">
-                <div
-                  onClick={() => setSelectedCategory("All")}
-                  className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-900 p-4 hover:border-white transition"
-                >
-                  <h3 className="font-medium">All</h3>
-                  <p className="mt-2 text-2xl font-bold">
-                    {documents.length}
-                  </p>
-                </div>
-                <div onClick={() => setSelectedCategory("Identity")}
-                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-                    <h3 className="font-medium">Identity</h3>
-                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Identity}</p>
-                </div>
+                <div className="grid gap-4 md:grid-cols-6">
 
-                <div onClick={() => setSelectedCategory("Education")}
-                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-                    <h3 className="font-medium">Education</h3>
-                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Education}</p>
-                </div>
+                  {categories.map((category) => (
 
-                <div onClick={() => setSelectedCategory("Financial")}
-                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-                    <h3 className="font-medium">Financial</h3>
-                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Financial}</p>
-                </div>
+                    <div
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`cursor-pointer rounded-xl border p-4 transition-all duration-200 ${
+                        selectedCategory === category
+                          ? "border-white bg-white text-black"
+                          : "border-zinc-800 bg-zinc-900 text-white hover:border-zinc-500"
+                      }`}
+                    >
+                      <h3 className="font-medium">
+                        {category}
+                      </h3>
 
-                <div onClick={() => setSelectedCategory("Medical")}
-                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-                    <h3 className="font-medium">Medical</h3>
-                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Medical}</p>
-                </div>
+                      <p className="mt-2 text-2xl font-bold">
+                        {category === "All"
+                          ? documents.length
+                          : categoryCounts[category]}
+                      </p>
 
-                <div onClick={() => setSelectedCategory("Other")}
-                className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-                    <h3 className="font-medium">Other</h3>
-                    <p className="mt-2 text-2xl font-bold">{categoryCounts.Other}</p>
-                </div>
+                    </div>
 
+                  ))}
                 </div>
 
 

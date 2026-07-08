@@ -1,13 +1,63 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import DocumentCard from "../components/DocumentCard";
+import UploadModal from "../components/UploadModal";
+import api from "../api/api";
 
 function Documents() {
+  const [documents, setDocuments] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchDocuments = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await api.get("/documents", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setDocuments(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const filteredDocuments = documents.filter((doc) => {
+    const matchesSearch = doc.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "All" ||
+      doc.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const categories = [
+    "All",
+    "Identity",
+    "Education",
+    "Financial",
+    "Medical",
+    "Other",
+  ];
+
   return (
     <Layout>
 
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Documents</h1>
-        <button className="rounded-xl bg-white px-4 py-2 text-black">+ Upload</button>
+        <button onClick={() => setIsModalOpen(true)}
+        className="rounded-xl bg-white px-4 py-2 text-black">+ Upload</button>
       </div>
 
       <p className="mt-2 text-zinc-400">All your documents in one place.</p>
@@ -15,46 +65,50 @@ function Documents() {
       <input
         type="text"
         placeholder="Search documents..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         className="mt-6 w-full rounded-xl bg-zinc-900 p-4 text-white outline-none border border-zinc-800"
       />
 
-      <div className="mt-8 flex gap-3">
-
-      <button className="rounded-lg bg-zinc-800 px-4 py-2">Identity</button>
-
-      <button className="rounded-lg bg-zinc-800 px-4 py-2">Education</button>
-
-      <button className="rounded-lg bg-zinc-800 px-4 py-2">Financial</button>
-
-      <button className="rounded-lg bg-zinc-800 px-4 py-2">Medical</button>
-
-      <button className="rounded-lg bg-zinc-800 px-4 py-2">Other</button>
+      <div className="mt-8 flex flex-wrap gap-3">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`rounded-lg px-4 py-2 transition ${
+              selectedCategory === category
+                ? "bg-white text-black"
+                : "bg-zinc-800 text-white hover:bg-zinc-700"
+            }`}
+          >
+            {category}
+          </button>
+        ))}
       </div>
 
       <h2 className="mt-10 mb-4 text-2xl font-semibold">
         All Documents
       </h2>
+
       <div className="grid gap-4 md:grid-cols-2">
-        <DocumentCard
-          title="Passport.pdf"
-          category="Identity"
-        />
-
-        <DocumentCard
-          title="PAN Card.pdf"
-          category="Identity"
-        />
-
-        <DocumentCard
-          title="Semester Marksheet.pdf"
-          category="Education"
-        />
-
-        <DocumentCard
-          title="Offer Letter.pdf"
-          category="Career"
-        />
+        {filteredDocuments.map((doc) => (
+          <DocumentCard
+            key={doc._id}
+            id={doc._id}
+            title={doc.title}
+            category={doc.category}
+            fileUrl={doc.fileUrl}
+            fetchDocuments={fetchDocuments}
+          />
+        ))}
       </div>
+
+      <UploadModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          fetchDocuments();
+        }}/>
 
     </Layout>
   );
