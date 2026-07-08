@@ -134,6 +134,7 @@ const categoryCounts = {
                 title={doc.title}
                 category={doc.category}
                 fileUrl={doc.fileUrl}
+                important={doc.important}
                 fetchDocuments={fetchDocuments}
                 />
             ))}

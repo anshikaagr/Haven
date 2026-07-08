@@ -2,9 +2,31 @@ import api from "../api/api";
 import { useState } from "react";
 import EditDocumentModal from "./EditDocumentModal";
 
-function DocumentCard({id, title, category, fileUrl ,fetchDocuments}) {
+function DocumentCard({id, title, category, fileUrl, important,fetchDocuments}) {
 
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const handleImportant = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.patch(
+        `/documents/${id}/important`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      fetchDocuments();
+
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update important status");
+    }
+  };
+
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this document?"
@@ -53,6 +75,13 @@ function DocumentCard({id, title, category, fileUrl ,fetchDocuments}) {
         <button onClick={() => setIsEditOpen(true)}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
           Edit
+        </button>
+
+        <button
+          onClick={handleImportant}
+          className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-400"
+        >
+          {important ? "★" : "☆"}
         </button>
 
         <button

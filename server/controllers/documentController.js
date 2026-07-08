@@ -111,3 +111,26 @@ exports.updateDocument = async (req, res) => {
     });
   }
 };
+
+exports.toggleImportant = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    document.important = !document.important;
+
+    await document.save();
+
+    res.json(document);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
