@@ -86,3 +86,28 @@ exports.deleteDocument = async (req, res) => {
     });
   }
 };
+
+exports.updateDocument = async (req, res) => {
+  try {
+    const { title, category } = req.body;
+
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    document.title = title;
+    document.category = category;
+
+    await document.save();
+
+    res.json(document);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

@@ -1,6 +1,10 @@
 import api from "../api/api";
+import { useState } from "react";
+import EditDocumentModal from "./EditDocumentModal";
 
 function DocumentCard({id, title, category, fileUrl ,fetchDocuments}) {
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this document?"
@@ -46,6 +50,11 @@ function DocumentCard({id, title, category, fileUrl ,fetchDocuments}) {
           View Document
         </button>
 
+        <button onClick={() => setIsEditOpen(true)}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+          Edit
+        </button>
+
         <button
           onClick={handleDelete}
           className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
@@ -53,7 +62,16 @@ function DocumentCard({id, title, category, fileUrl ,fetchDocuments}) {
           Delete
         </button>
       </div>
-
+    <EditDocumentModal
+      isOpen={isEditOpen}
+      onClose={() => setIsEditOpen(false)}
+      document={{
+        _id: id,
+        title,
+        category,
+      }}
+      fetchDocuments={fetchDocuments}
+    />
     </div>
   );
 }

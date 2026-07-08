@@ -7,10 +7,12 @@ const {
   createDocument,
   getDocuments,
   deleteDocument,
+  updateDocument,
 } = require("../controllers/documentController");
 
 router.post("/", protect, upload.single("file"), createDocument);
 router.get("/", protect, getDocuments);
 router.delete("/:id", protect, deleteDocument);
+router.put("/:id", protect, updateDocument);
 
 module.exports = router;
