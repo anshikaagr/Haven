@@ -1,6 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
+
 
 function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <aside className="w-64 border-r border-zinc-800 p-6">
       <h1 className="mb-10 text-2xl font-bold">Haven</h1>
@@ -12,6 +20,11 @@ function Sidebar() {
         <Link to="/expiry">Expiry</Link>
         <Link to="/settings">Settings</Link>
       </nav>
+      
+      <button
+        onClick={handleLogout}
+        className="mt-auto rounded-xl bg-red-600 px-4 py-2 text-white hover:bg-red-700">
+        Logout</button>
     </aside>
   );
 }

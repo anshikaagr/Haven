@@ -23,7 +23,9 @@ function App() {
 export default App;*/
 
 import { Routes, Route } from "react-router-dom";
-
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Hero from "./pages/Hero";
 import Dashboard from "./pages/Dashboard";
 import Documents from "./pages/Documents";
@@ -34,12 +36,24 @@ import Settings from "./pages/Settings";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Hero />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/documents" element={<Documents />} />
-      <Route path="/important" element={<Important />} />
-      <Route path="/expiry" element={<Expiry />} />
-      <Route path="/settings" element={<Settings />} />
+      <Route path="/" element={<ProtectedRoute> <Hero/> </ProtectedRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>} />
+      <Route path="/documents" element={<ProtectedRoute>
+      <Documents />
+    </ProtectedRoute>} />
+      <Route path="/important" element={<ProtectedRoute>
+      <Important />
+    </ProtectedRoute>} />
+      <Route path="/expiry" element={<ProtectedRoute>
+      <Expiry />
+    </ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute>
+      <Settings />
+    </ProtectedRoute>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }
