@@ -1,6 +1,29 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import api from "../api/api";
 
 function Settings() {
+  const [user, setUser] = useState(null);
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await api.get("/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUser(res.data.user);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
   return (
     <Layout>
       <h1 className="text-3xl font-bold">
@@ -67,9 +90,15 @@ function Settings() {
           </h2>
 
           <div className="space-y-3 text-zinc-300">
-            <p>Name: Anshika</p>
-            <p>Email: anshika.agrawal.hnd@gmail.com</p>
-            <p>Member Since: June 2026</p>
+            <p>Name: {user?.name}</p>
+
+            <p>Email: {user?.email}</p>
+
+            <p>
+              Member Since:{" "}
+              {user
+                ? new Date(user.createdAt).toLocaleDateString(): ""}
+            </p>
           </div>
         </div>
 
