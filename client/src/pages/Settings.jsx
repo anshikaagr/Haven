@@ -4,6 +4,7 @@ import api from "../api/api";
 
 function Settings() {
   const [user, setUser] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -21,9 +22,34 @@ function Settings() {
     }
   };
 
+  const fetchDocuments = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await api.get("/documents", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setDocuments(res.data);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchProfile();
+    fetchDocuments();
   }, []);
+
+  const totalDocuments = documents.length;
+
+  const importantDocuments = documents.filter(
+    (doc) => doc.important
+  ).length;
+
   return (
     <Layout>
       <h1 className="text-3xl font-bold">
@@ -43,7 +69,7 @@ function Settings() {
           </h2>
 
           <p className="mt-4 text-4xl font-bold">
-            24
+            {totalDocuments}
           </p>
 
           <p className="text-zinc-400">
@@ -57,7 +83,7 @@ function Settings() {
           </h2>
 
           <p className="mt-4 text-4xl font-bold">
-            5
+            {importantDocuments}
           </p>
 
           <p className="text-zinc-400">
@@ -71,11 +97,11 @@ function Settings() {
           </h2>
 
           <p className="mt-4 text-4xl font-bold">
-            2.4GB
+            coming soon
           </p>
 
           <p className="text-zinc-400">
-            Used of 10GB
+            Storage tracking coming soon
           </p>
         </div>
 
