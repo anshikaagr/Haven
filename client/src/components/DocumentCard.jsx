@@ -2,7 +2,7 @@ import api from "../api/api";
 import { useState } from "react";
 import EditDocumentModal from "./EditDocumentModal";
 
-function DocumentCard({id, title, category, fileUrl, important,fetchDocuments}) {
+function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchDocuments}) {
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const handleImportant = async () => {
@@ -56,6 +56,37 @@ function DocumentCard({id, title, category, fileUrl, important,fetchDocuments}) 
     }
   };
   
+  const getExpiryStatus = () => {
+  if (!expiryDate) return null;
+
+  const today = new Date();
+  const expiry = new Date(expiryDate);
+
+  const days = Math.ceil(
+    (expiry - today) / (1000 * 60 * 60 * 24)
+  );
+
+  if (days < 0) {
+    return {
+      text: `🔴 Expired ${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"} ago`,
+      className: "text-red-400",
+    };
+  }
+
+  if (days <= 30) {
+    return {
+      text: `🟡 Expires in ${days} day${days === 1 ? "" : "s"}`,
+      className: "text-yellow-400",
+    };
+  }
+
+    return {
+      text: `🟢 Expires in ${days} day${days === 1 ? "" : "s"}`,
+      className: "text-green-400",
+    };
+  };
+
+const expiryStatus = getExpiryStatus();
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
       <h3 className="font-semibold text-lg">{title}</h3>
@@ -63,6 +94,16 @@ function DocumentCard({id, title, category, fileUrl, important,fetchDocuments}) 
       <p className="mt-1 text-sm text-zinc-400">
         {category}
       </p>
+      {expiryDate && (
+        <p className="mt-2 text-sm text-zinc-400">
+          Expiry: {new Date(expiryDate).toLocaleDateString()}
+        </p>
+      )}
+      {expiryStatus && (
+        <p className={`mt-1 text-sm font-medium ${expiryStatus.className}`}>
+          {expiryStatus.text}
+        </p>
+      )}
 
       <div className="mt-4 flex gap-3">
         <button
@@ -98,6 +139,7 @@ function DocumentCard({id, title, category, fileUrl, important,fetchDocuments}) 
         _id: id,
         title,
         category,
+        expiryDate,
       }}
       fetchDocuments={fetchDocuments}
     />

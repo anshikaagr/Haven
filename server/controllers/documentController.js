@@ -4,7 +4,7 @@ const streamifier = require("streamifier");
 
 exports.createDocument = async (req, res) => {
   try {
-    const { title, category} = req.body;
+    const { title, category, expiryDate} = req.body;
 
     if (!req.file) {
       return res.status(400).json({
@@ -33,6 +33,8 @@ exports.createDocument = async (req, res) => {
       category,
       fileUrl: result.secure_url,
       publicId: result.public_id,
+      important: false,
+      expiryDate,
       user: req.user.id,
     });
 
@@ -89,7 +91,7 @@ exports.deleteDocument = async (req, res) => {
 
 exports.updateDocument = async (req, res) => {
   try {
-    const { title, category } = req.body;
+    const { title, category, expiryDate } = req.body;
 
     const document = await Document.findById(req.params.id);
 
@@ -101,6 +103,7 @@ exports.updateDocument = async (req, res) => {
 
     document.title = title;
     document.category = category;
+    document.expiryDate = expiryDate;
 
     await document.save();
 

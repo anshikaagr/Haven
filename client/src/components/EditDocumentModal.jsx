@@ -9,11 +9,17 @@ function EditDocumentModal({
 }) {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Identity");
+  const [expiryDate, setExpiryDate] = useState("");
 
   useEffect(() => {
     if (document) {
       setTitle(document.title);
       setCategory(document.category);
+      setExpiryDate(
+      document.expiryDate
+          ? document.expiryDate.substring(0, 10)
+          : ""
+      );
     }
   }, [document]);
 
@@ -28,6 +34,7 @@ function EditDocumentModal({
         {
           title,
           category,
+          expiryDate,
         },
         {
           headers: {
@@ -82,6 +89,13 @@ function EditDocumentModal({
           <option>Medical</option>
           <option>Other</option>
         </select>
+
+        <input
+          type="date"
+          value={expiryDate}
+          onChange={(e) => setExpiryDate(e.target.value)}
+          className="mb-4 w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-white outline-none"
+        />
 
         <button onClick={handleUpdate}
           className="w-full rounded-xl bg-white py-3 font-semibold text-black hover:bg-zinc-200">

@@ -91,16 +91,34 @@ function Documents() {
       </h2>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {filteredDocuments.map((doc) => (
+        {filteredDocuments.length > 0 ? (
+        filteredDocuments.map((doc) => (
           <DocumentCard
             key={doc._id}
             id={doc._id}
             title={doc.title}
             category={doc.category}
             fileUrl={doc.fileUrl}
+            important={doc.important}
+            expiryDate={doc.expiryDate}
             fetchDocuments={fetchDocuments}
           />
-        ))}
+        ))
+      ) : (
+        <div className="col-span-2 rounded-xl border border-dashed border-zinc-700 bg-zinc-900 p-10 text-center">
+          <h3 className="text-xl font-semibold text-white">No documents found</h3>
+
+          <p className="mt-2 text-zinc-400">
+            Upload your first document to start organizing your vault.
+          </p>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="mt-6 rounded-xl bg-white px-5 py-3 font-medium text-black hover:bg-zinc-200"
+          >Upload Document
+          </button>
+        </div>
+      )}
       </div>
 
       <UploadModal

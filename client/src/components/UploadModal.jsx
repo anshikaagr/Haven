@@ -5,6 +5,7 @@ function UploadModal({ isOpen, onClose ,
   fetchDocuments,}) {
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("Identity");
+    const [expiryDate, setExpiryDate] = useState("");
     const [file, setFile] = useState(null);
     const handleUpload = async () => {
   try {
@@ -13,6 +14,7 @@ function UploadModal({ isOpen, onClose ,
     const formData = new FormData();
     formData.append("title", title);
     formData.append("category", category);
+    formData.append("expiryDate", expiryDate);
     formData.append("file", file);
 
     await api.post(
@@ -77,6 +79,12 @@ function UploadModal({ isOpen, onClose ,
           <option>Medical</option>
           <option>Other</option>
         </select>
+        <input
+          type="date"
+          value={expiryDate}
+          onChange={(e) => setExpiryDate(e.target.value)}
+          className="mb-4 w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-white outline-none"
+        />
 
         <input
           type="file"

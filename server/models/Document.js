@@ -27,6 +27,11 @@ const documentSchema = new mongoose.Schema(
       default: false,
     },
 
+    expiryDate: {
+      type: Date,
+      default: null,
+    },
+    
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
