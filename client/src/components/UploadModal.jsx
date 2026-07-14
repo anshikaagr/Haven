@@ -8,7 +8,9 @@ function UploadModal({ isOpen, onClose ,
     const [category, setCategory] = useState("Identity");
     const [expiryDate, setExpiryDate] = useState("");
     const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false);
     const handleUpload = async () => {
+      setLoading(true);
   try {
     const token = localStorage.getItem("token");
 
@@ -32,14 +34,14 @@ function UploadModal({ isOpen, onClose ,
     setCategory("Identity");
     setExpiryDate("");
     setFile(null);
-
+    setLoading(false);
     onClose();
 
   } catch (error) {
     console.log(error);
     console.log(error.response);
     console.log(error.response?.data);
-
+    setLoading(false);
     toast.error(error.response?.data?.message || "Upload failed");
   }
 };
@@ -95,10 +97,15 @@ function UploadModal({ isOpen, onClose ,
         />
 
         <button
-        onClick={handleUpload}
-          className="w-full rounded-xl bg-white py-3 font-semibold text-black hover:bg-zinc-200"
+          onClick={handleUpload}
+          disabled={loading}
+          className={`w-full rounded-xl py-3 font-semibold transition ${
+            loading
+              ? "cursor-not-allowed bg-zinc-500 text-white"
+              : "bg-white text-black hover:bg-zinc-200"
+          }`}
         >
-          Upload
+          {loading ? "Uploading..." : "Upload"}
         </button>
 
       </div>

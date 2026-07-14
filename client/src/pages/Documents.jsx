@@ -125,8 +125,9 @@ function Documents() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          fetchDocuments();
-        }}/>
+        }}
+        fetchDocuments={fetchDocuments}
+        />
 
     </Layout>
   );

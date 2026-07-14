@@ -8,8 +8,10 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await api.post("/auth/register", {
         name,
@@ -18,11 +20,13 @@ function Register() {
 
       toast.success("Account created successfully!");
       navigate("/login");
+      setLoading(false);
     } catch (error) {
       console.log(error);
       toast.error(
         error.response?.data?.message || "Registration failed"
       );
+      setLoading(false);
     }
   };
 
@@ -30,10 +34,11 @@ function Register() {
     <div className="flex min-h-screen items-center justify-center bg-zinc-950">
       <form
         onSubmit={handleRegister}
+        disabled={loading}
         className="w-[400px] rounded-2xl bg-zinc-900 p-8"
       >
         <h1 className="mb-6 text-3xl font-bold text-white">
-          Register
+          {loading ? "Creating Account..." : "Register"}
         </h1>
 
         <input

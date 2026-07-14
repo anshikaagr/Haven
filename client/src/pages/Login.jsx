@@ -8,9 +8,11 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await api.post("/auth/login", {
@@ -22,11 +24,13 @@ function Login() {
       toast.success("Welcome back!");
       setTimeout(() => {
         navigate("/dashboard");
+        setLoading(false);
       }, 800);
 
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Login failed");
+      setLoading(false);
     }
   };
 
@@ -58,9 +62,10 @@ function Login() {
 
         <button
           type="submit"
+          disabled={loading}
           className="w-full rounded-xl bg-white py-3 font-semibold text-black hover:bg-zinc-200"
         >
-          Login
+          {loading ? "Signing In..." : "Login"}
         </button>
 
         <p className="mt-5 text-center text-zinc-400">
