@@ -132,11 +132,7 @@ function Settings() {
           <h2 className="mb-4 text-xl font-semibold">
             Preferences
           </h2>
-
-          <div className="space-y-3 text-zinc-300">
-            <p>Theme: Dark Mode</p>
-            <p>Notifications: Enabled</p>
-          </div>
+          <p>Theme: Dark Mode</p>
         </div>
 
       </div>

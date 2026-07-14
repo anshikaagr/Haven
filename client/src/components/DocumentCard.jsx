@@ -55,6 +55,17 @@ function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchD
       alert(error.response?.data?.message || "Delete failed!");
     }
   };
+
+  const handleDownload = () => {
+    const downloadUrl = fileUrl.replace(
+      "/upload/","/upload/fl_attachment/");
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = title;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   
   const getExpiryStatus = () => {
   if (!expiryDate) return null;
@@ -111,6 +122,13 @@ const expiryStatus = getExpiryStatus();
           className="mt-4 rounded-lg bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200"
         >
           View Document
+        </button>
+
+        <button
+          onClick={handleDownload}
+          className="mt-4 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+        >
+          Download
         </button>
 
         <button onClick={() => setIsEditOpen(true)}

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -10,6 +11,7 @@ import Expiry from "./pages/Expiry";
 import Settings from "./pages/Settings";
 
 function App() {
+
   return (
     <Routes>
       <Route path="/" element={<ProtectedRoute> <Hero/> </ProtectedRoute>} />
