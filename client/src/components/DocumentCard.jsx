@@ -1,6 +1,7 @@
 import api from "../api/api";
 import { useState } from "react";
 import EditDocumentModal from "./EditDocumentModal";
+import toast from "react-hot-toast";
 
 function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchDocuments}) {
 
@@ -18,12 +19,13 @@ function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchD
           },
         }
       );
+      toast.success(important? "Removed from important": "Marked as important");
 
       fetchDocuments();
 
     } catch (error) {
       console.log(error);
-      alert("Failed to update important status");
+      toast.error("Failed to update important status");
     }
   };
 
@@ -43,7 +45,7 @@ function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchD
         },
       });
 
-      alert("Document deleted!");
+      toast.success("Document deleted successfully");
 
       await fetchDocuments();
 
@@ -52,7 +54,7 @@ function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchD
       console.log(error.response);
       console.log(error.response?.data);
 
-      alert(error.response?.data?.message || "Delete failed!");
+      toast.error(error.response?.data?.message || "Delete failed!");
     }
   };
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
+import toast from "react-hot-toast";
 
 function Register() {
   const navigate = useNavigate();
@@ -15,11 +16,13 @@ function Register() {
         email,
         password,});
 
-      alert("Registration successful! Please login.");
+      toast.success("Account created successfully!");
       navigate("/login");
     } catch (error) {
       console.log(error);
-      alert(error.response?.data?.message || "Registration failed");
+      toast.error(
+        error.response?.data?.message || "Registration failed"
+      );
     }
   };
 

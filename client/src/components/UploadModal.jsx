@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/api";
+import toast from "react-hot-toast";
 
 function UploadModal({ isOpen, onClose ,
   fetchDocuments,}) {
@@ -25,10 +26,11 @@ function UploadModal({ isOpen, onClose ,
       },
     });
 
-    alert("Document uploaded!");
+    toast.success("Document uploaded successfully");
     await fetchDocuments();
     setTitle("");
     setCategory("Identity");
+    setExpiryDate("");
     setFile(null);
 
     onClose();
@@ -38,7 +40,7 @@ function UploadModal({ isOpen, onClose ,
     console.log(error.response);
     console.log(error.response?.data);
 
-    alert(error.response?.data?.message || "Upload failed!");
+    toast.error(error.response?.data?.message || "Upload failed");
   }
 };
   if (!isOpen) return null;

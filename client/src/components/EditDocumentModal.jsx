@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
+import toast from "react-hot-toast";
 
 function EditDocumentModal({
   isOpen,
@@ -43,14 +44,14 @@ function EditDocumentModal({
         }
       );
 
-      alert("Document updated!");
+      toast.success("Document updated successfully");
 
       fetchDocuments();
 
       onClose();
     } catch (error) {
       console.log(error);
-      alert("Update failed!");
+      toast.error(error.response?.data?.message || "Update failed");
     }
   };
 
