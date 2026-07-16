@@ -28,6 +28,7 @@ exports.createDocument = async (req, res) => {
         streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
       });
       const result = await uploadFromBuffer();
+      console.log(result);
     const document = await Document.create({
       title,
       category,
@@ -72,9 +73,7 @@ exports.deleteDocument = async (req, res) => {
       });
     }
 
-    await cloudinary.uploader.destroy(document.publicId, {
-      resource_type: "raw",
-    });
+    await cloudinary.uploader.destroy(document.publicId);
 
     await document.deleteOne();
 

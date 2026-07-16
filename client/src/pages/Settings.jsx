@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import api from "../api/api";
+import ChangePasswordModal from "../components/ChangePasswordModal";
+import DeleteAccountModal from "../components/DeleteAccountModal";
 
 function Settings() {
   const [user, setUser] = useState(null);
   const [documents, setDocuments] = useState([]);
+  const [isPasswordOpen, setIsPasswordOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -144,22 +148,36 @@ function Settings() {
         </h2>
 
         <div className="flex flex-wrap gap-4">
-          <button className="rounded-lg bg-zinc-800 px-4 py-2">
+          <button onClick={() => setIsPasswordOpen(true)}
+            className="rounded-lg bg-zinc-800 px-4 py-2 transition hover:bg-zinc-700">
             Change Password
           </button>
         </div>
       </div>
 
-      {/* Account */}
       <div className="mt-8 rounded-xl border border-red-900 bg-zinc-900 p-6">
-        <h2 className="mb-4 text-xl font-semibold text-red-400">
-          Account
+        <h2 className="text-xl font-semibold text-white">
+          Account Management
         </h2>
-        <button className="rounded-lg bg-red-500 px-5 py-2 font-medium text-white">
-          Logout
+        <p className="mb-6 text-sm text-zinc-400">
+          Permanently delete your account and all uploaded documents.
+          This action cannot be undone.
+        </p>
+
+        <button onClick={() => setIsDeleteOpen(true)}
+          className="rounded-xl bg-red-600 px-5 py-3 font-medium text-white transition hover:bg-red-700"
+        >
+          Delete Account
         </button>
       </div>
-
+      <ChangePasswordModal
+        isOpen={isPasswordOpen}
+        onClose={() => setIsPasswordOpen(false)}
+      />
+      <DeleteAccountModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+      />
     </Layout>
   );
 }
