@@ -54,6 +54,20 @@ function Settings() {
     (doc) => doc.important
   ).length;
 
+  const totalBytes = documents.reduce(
+    (sum, doc) => sum + (doc.fileSize || 0),
+    0
+  );
+
+  const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+
+  const storageLimit = 100; // MB
+
+  const storagePercentage = Math.min(
+    (Number(totalMB) / storageLimit) * 100,
+    100
+  );
+
   return (
     <Layout>
       <h1 className="text-3xl font-bold">
@@ -101,11 +115,21 @@ function Settings() {
           </h2>
 
           <p className="mt-4 text-4xl font-bold">
-            coming soon
+            {totalMB} MB
           </p>
 
           <p className="text-zinc-400">
-            Storage tracking coming soon
+            Used of {storageLimit} MB
+          </p>
+          <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-zinc-800">
+            <div
+              className="h-full rounded-full bg-white transition-all"
+              style={{ width: `${storagePercentage}%` }}
+            />
+          </div>
+
+          <p className="mt-3 text-sm text-zinc-400">
+            {totalDocuments} Documents
           </p>
         </div>
 

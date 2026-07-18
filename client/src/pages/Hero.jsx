@@ -1,7 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 function Hero() {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       <Navbar />
@@ -19,8 +30,9 @@ function Hero() {
         </p>
 
         <div className="mt-10 flex gap-4">
-          <Link to="/dashboard"
-            className="rounded-xl bg-white px-6 py-3 text-black">Get Started</Link>
+          <button onClick={handleGetStarted}
+            className="rounded-xl bg-white px-6 py-3 text-black hover:bg-zinc-200">
+            Get Started </button>
           <button className="rounded-xl border border-zinc-700 px-6 py-3">Learn More</button>
         </div>
 

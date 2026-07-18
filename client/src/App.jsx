@@ -14,7 +14,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoute> <Hero/> </ProtectedRoute>} />
+      <Route path="/" element={<Hero/>} />
       <Route path="/dashboard" element={<ProtectedRoute>
       <Dashboard />
     </ProtectedRoute>} />

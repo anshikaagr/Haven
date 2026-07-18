@@ -1,4 +1,5 @@
 import { Link , useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 function Sidebar() {
@@ -6,7 +7,9 @@ function Sidebar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    toast.success("Logged out successfully");
+
+    navigate("/");
   };
 
   return (

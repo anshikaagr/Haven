@@ -36,6 +36,10 @@ const documentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    fileSize: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -37,6 +37,7 @@ exports.createDocument = async (req, res) => {
       important: false,
       expiryDate,
       user: req.user.id,
+      fileSize: req.file.size,
     });
 
     res.status(201).json(document);
