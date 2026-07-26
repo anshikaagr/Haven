@@ -3,6 +3,8 @@ import Layout from "../components/Layout";
 import DocumentCard from "../components/DocumentCard";
 import UploadModal from "../components/UploadModal";
 import api from "../api/api";
+import SearchBar from "../components/SearchBar";
+import { Upload, FileText } from "lucide-react";
 
 function Documents() {
   const [documents, setDocuments] = useState([]);
@@ -57,18 +59,16 @@ function Documents() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Documents</h1>
         <button onClick={() => setIsModalOpen(true)}
-        className="rounded-xl bg-white px-4 py-2 text-black">+ Upload</button>
+        className="flex items-center gap-2 rounded-2xl bg-white px-6 py-3 font-medium text-black transition-all duration-200 hover:scale-105 hover:bg-zinc-200"><Upload size={18} /> Upload</button>
       </div>
 
-      <p className="mt-2 text-zinc-400">All your documents in one place.</p>
-
-      <input
-        type="text"
-        placeholder="Search documents..."
+      <p className="mt-1 text-zinc-400">All your documents in one place.</p>
+      <div className="mt-6">
+      <SearchBar
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="mt-6 w-full rounded-xl bg-zinc-900 p-4 text-white outline-none border border-zinc-800"
       />
+      </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
         {categories.map((category) => (
@@ -86,8 +86,8 @@ function Documents() {
         ))}
       </div>
 
-      <h2 className="mt-10 mb-4 text-2xl font-semibold">
-        All Documents
+      <h2 className="mt-12 mb-4 text-2xl font-semibold">
+        All Documents ({filteredDocuments.length})
       </h2>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -105,7 +105,11 @@ function Documents() {
           />
         ))
       ) : (
-        <div className="col-span-2 rounded-xl border border-dashed border-zinc-700 bg-zinc-900 p-10 text-center">
+        <div className="col-span-2 rounded-2xl border border-dashed border-zinc-700 bg-zinc-900 py-10 px-8 text-center">
+          <FileText
+            size={52}
+            className="mx-auto mb-5 text-zinc-600"
+          />
           <h3 className="text-xl font-semibold text-white">No documents found</h3>
 
           <p className="mt-2 text-zinc-400">

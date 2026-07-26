@@ -3,6 +3,8 @@ import Layout from "../components/Layout";
 import DocumentCard from "../components/DocumentCard";
 import UploadModal from "../components/UploadModal";
 import api from "../api/api";
+import SearchBar from "../components/SearchBar";
+import { Upload, FileText } from "lucide-react";
 
 function Important() {
   const [documents, setDocuments] = useState([]);
@@ -59,25 +61,25 @@ function Important() {
     <Layout>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">
-          Important Documents
+          Important Documents ({filteredDocuments.length})
         </h1>
 
         <button onClick={() => setIsModalOpen(true)}
-        className="rounded-xl bg-white px-4 py-2 text-black">
-          + Upload
+        className="flex items-center gap-2 rounded-2xl bg-white px-6 py-3 font-medium text-black transition-all duration-200 hover:scale-105 hover:bg-zinc-200">
+          <Upload size={18} />
+          Upload
         </button>
       </div>
 
       <p className="mt-2 text-zinc-400">
         Your pinned and frequently used documents.
       </p>
-      <input
-        type="text"
-        placeholder="Search important documents..."
+      <div className="mt-5">
+      <SearchBar
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="mt-6 w-full rounded-xl border border-zinc-800 bg-zinc-900 p-4 text-white outline-none"
       />
+      </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
         {categories.map((category) => (
@@ -95,8 +97,9 @@ function Important() {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
-        {filteredDocuments.map((doc) => (
+      <div className="mt-10 grid gap-4 md:grid-cols-2">
+        {filteredDocuments.length > 0 ? (
+        filteredDocuments.map((doc) => (
           <DocumentCard
             key={doc._id}
             id={doc._id}
@@ -104,18 +107,41 @@ function Important() {
             category={doc.category}
             fileUrl={doc.fileUrl}
             important={doc.important}
+            expiryDate={doc.expiryDate}
             fetchDocuments={fetchDocuments}
           />
-        ))}
+        ))
+      ) : (
+    <div className="col-span-2 rounded-2xl border border-dashed border-zinc-700 bg-zinc-900 py-10 px-8 text-center">
+
+      <FileText
+        size={48}
+        className="mx-auto mb-5 text-zinc-600"
+      />
+
+      <h3 className="text-2xl font-semibold">
+        No important documents
+      </h3>
+
+      <p className="mt-3 text-zinc-400">
+        Star documents to keep your most important files within easy reach.
+      </p>
+
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="mt-8 rounded-xl bg-white px-6 py-3 font-medium text-black hover:bg-zinc-200"
+      > Upload Document
+      </button>
+
+    </div>
+  )}
       </div>
       <UploadModal
         isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          fetchDocuments();
-        }}
+        onClose={() => setIsModalOpen(false)}
+        fetchDocuments={fetchDocuments}
       />
-    </Layout>
+          </Layout>
   );
 }
 

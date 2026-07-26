@@ -2,6 +2,14 @@ import api from "../api/api";
 import { useState } from "react";
 import EditDocumentModal from "./EditDocumentModal";
 import toast from "react-hot-toast";
+import {
+  FileText,
+  Eye,
+  Download,
+  Pencil,
+  Star,
+  Trash2,
+} from "lucide-react";
 
 function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchDocuments}) {
 
@@ -21,7 +29,7 @@ function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchD
       );
       toast.success(important? "Removed from important": "Marked as important");
 
-      fetchDocuments();
+      await fetchDocuments();
 
     } catch (error) {
       console.log(error);
@@ -101,57 +109,90 @@ function DocumentCard({id, title, category, fileUrl, important,expiryDate,fetchD
 
 const expiryStatus = getExpiryStatus();
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-4">
-      <h3 className="font-semibold text-lg">{title}</h3>
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-5 transition-all duration-300 hover:border-zinc-700">
 
-      <p className="mt-1 text-sm text-zinc-400">
-        {category}
+    {/* Header */}
+    <div className="flex items-start justify-between">
+      <div className="flex items-center gap-3">
+
+        <div className="rounded-xl bg-zinc-800 p-3">
+          <FileText size={22} />
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold">
+            {title}
+          </h3>
+
+          <p className="text-sm text-zinc-500">
+            {category}
+          </p>
+        </div>
+
+      </div>
+
+      <button
+        onClick={handleImportant}
+        className="rounded-lg p-2 hover:bg-zinc-800"
+      >
+        <Star
+          size={18}
+          fill={important ? "currentColor" : "none"}
+        />
+      </button>
+
+    </div>
+
+    {/* Expiry */}
+
+    {expiryDate && (
+      <p className="mt-4 text-sm text-zinc-500">
+        Expiry: {new Date(expiryDate).toLocaleDateString()}
       </p>
-      {expiryDate && (
-        <p className="mt-2 text-sm text-zinc-400">
-          Expiry: {new Date(expiryDate).toLocaleDateString()}
-        </p>
-      )}
-      {expiryStatus && (
-        <p className={`mt-1 text-sm font-medium ${expiryStatus.className}`}>
-          {expiryStatus.text}
-        </p>
-      )}
+    )}
 
-      <div className="mt-4 flex gap-3">
-        <button
-          onClick={() => window.open(fileUrl, "_blank")}
-          className="mt-4 rounded-lg bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200"
-        >
-          View Document
-        </button>
+    {expiryStatus && (
+      <p className={`mt-1 text-sm ${expiryStatus.className}`}>
+        {expiryStatus.text}
+      </p>
+    )}
+
+    {/* Actions */}
+
+    <div className="mt-5 flex items-center justify-between">
+
+      <button
+        onClick={() => window.open(fileUrl, "_blank")}
+        className="flex items-center gap-2 rounded-lg border border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-800"
+      >
+        <Eye size={16} />
+        View
+      </button>
+
+      <div className="flex gap-2">
 
         <button
           onClick={handleDownload}
-          className="mt-4 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+          className="rounded-lg p-2 hover:bg-zinc-800"
         >
-          Download
-        </button>
-
-        <button onClick={() => setIsEditOpen(true)}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-          Edit
+          <Download size={18} />
         </button>
 
         <button
-          onClick={handleImportant}
-          className="rounded-lg bg-yellow-500 px-4 py-2 text-sm font-medium text-black hover:bg-yellow-400"
+          onClick={() => setIsEditOpen(true)}
+          className="rounded-lg p-2 hover:bg-zinc-800"
         >
-          {important ? "★" : "☆"}
+          <Pencil size={18} />
         </button>
 
         <button
           onClick={handleDelete}
-          className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+          className="rounded-lg p-2 hover:bg-red-600/20 hover:text-red-400"
         >
-          Delete
+          <Trash2 size={18} />
         </button>
       </div>
+    </div>
     <EditDocumentModal
       isOpen={isEditOpen}
       onClose={() => setIsEditOpen(false)}

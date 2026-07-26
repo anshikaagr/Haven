@@ -4,6 +4,14 @@ import Sidebar from "../components/Sidebar";
 import SearchBar from "../components/SearchBar";
 import DocumentCard from "../components/DocumentCard";
 import UploadModal from "../components/UploadModal";
+import { FileText } from "lucide-react";
+import { Upload,
+  Folder,
+  IdCard,
+  GraduationCap,
+  Landmark,
+  HeartPulse,
+  FolderOpen } from "lucide-react";
 
 function Dashboard() {
 
@@ -52,7 +60,14 @@ const categoryCounts = {
   }
   
   );
-
+  const categoryIcons = {
+  All: Folder,
+  Identity: IdCard,
+  Education: GraduationCap,
+  Financial: Landmark,
+  Medical: HeartPulse,
+  Other: FolderOpen,
+};
   const categories = [
   "All",
   "Identity",
@@ -61,13 +76,12 @@ const categoryCounts = {
   "Medical",
   "Other",
 ];
-
   return (
     <div className="flex min-h-screen bg-zinc-950 text-white">
       <Sidebar />
 
       <main className="flex-1 p-8">
-        <div className="mb-6 flex items-start justify-between">
+        <div className="mb-6 flex items-center justify-between">
 
         <div>
             <h1 className="text-3xl font-bold">
@@ -81,52 +95,65 @@ const categoryCounts = {
 
         <button 
         onClick={() => setIsModalOpen(true)}
-        className="rounded-xl bg-white px-5 py-3 font-medium text-black">+ Upload</button>
+        className="flex items-center gap-2 rounded-2xl bg-white px-6 py-3 font-medium text-black transition-all duration-200 hover:scale-105 hover:bg-zinc-200"><Upload size={18} />Upload</button>
 
         </div>
 
-        <input
-          type="text"
-          placeholder="Search documents..."
+        <SearchBar
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border border-zinc-800 bg-zinc-900 p-4 text-white outline-none"
         />
 
         <h2 className="mt-8 mb-4 text-xl font-semibold">Categories</h2>
 
-                <div className="grid gap-4 md:grid-cols-6">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
 
-                  {categories.map((category) => (
+                  {categories.map((category) => {
+                    const Icon = categoryIcons[category];
+
+                    return (
 
                     <div
                       key={category}
                       onClick={() => setSelectedCategory(category)}
-                      className={`cursor-pointer rounded-xl border p-4 transition-all duration-200 ${
+                      className={`cursor-pointer rounded-xl border p-4 transition-all duration-300 ${
                         selectedCategory === category
-                          ? "border-white bg-white text-black"
-                          : "border-zinc-800 bg-zinc-900 text-white hover:border-zinc-500"
+                          ? "border-white bg-zinc-800 shadow-lg"
+                          : "border-zinc-800 bg-zinc-900 hover:border-zinc-700 hover:bg-zinc-800/50"
                       }`}
                     >
-                      <h3 className="font-medium">
-                        {category}
-                      </h3>
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className={`rounded-lg p-2 ${
+                          selectedCategory === category
+                            ? "bg-white text-black"
+                            : "bg-zinc-800 text-white"
+                        }`}
+                      >
+                        <Icon size={18} />
+                      </div>
 
-                      <p className="mt-2 text-2xl font-bold">
-                        {category === "All"
-                          ? documents.length
-                          : categoryCounts[category]}
-                      </p>
+                      <div>
+                        <h3 className="font-medium">{category}</h3>
+
+                        <p className="text-xs text-zinc-500">
+                          {category === "All"
+                            ? `${documents.length} Documents`
+                            : `${categoryCounts[category]} Documents`}
+                        </p>
+                      </div>
+                    </div>
 
                     </div>
 
-                  ))}
+                  );
+                })}
                 </div>
 
 
-            <h2 className="mb-4 text-xl font-semibold">Recent Documents</h2>
+            <h2 className="mt-8 mb-4 text-xl font-semibold">Recent Documents</h2>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-5 lg:grid-cols-2">
             {filteredDocuments.length > 0 ? (
             filteredDocuments.map((doc) => (
                 <DocumentCard
@@ -136,19 +163,26 @@ const categoryCounts = {
                 category={doc.category}
                 fileUrl={doc.fileUrl}
                 important={doc.important}
+                expiryDate={doc.expiryDate}
                 fetchDocuments={fetchDocuments}
                 />
             ))
-              ) : (<div className="col-span-2 rounded-xl border border-dashed border-zinc-700 bg-zinc-900 p-10 text-center">
-              <h3 className="text-xl font-semibold text-white">No documents found</h3>
+              ) : (
+              <div className="col-span-2 rounded-xl border border-dashed border-zinc-700 bg-zinc-900 py-10 px-8 text-center">
+              <FileText
+                size={48}
+                className="mx-auto mb-5 text-zinc-600"
+              />
 
-              <p className="mt-2 text-zinc-400">
+              <h3 className="text-2xl font-semibold ">No documents found</h3>
+
+              <p className="mt-3 text-zinc-400">
                 Upload your first document to get started.
               </p>
 
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="mt-6 rounded-xl bg-white px-5 py-3 font-medium text-black hover:bg-zinc-200"
+                className="mt-8 rounded-xl bg-white px-6 py-3 font-medium text-black transition hover:bg-zinc-200"
               > Upload Document
               </button>
             </div>
@@ -158,7 +192,7 @@ const categoryCounts = {
             <UploadModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
-              
+              fetchDocuments={fetchDocuments}
             />
             </div>
   );
